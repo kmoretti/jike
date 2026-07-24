@@ -1,1 +1,0 @@
-import{t as e}from"./Bdn_k338.js";var t=()=>e(`color-mode`).value;export{t};
