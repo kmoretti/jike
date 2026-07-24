@@ -1,0 +1,9 @@
+.markdown-body p:first-child { margin-top: 0; }
+.markdown-body p:last-child { margin-bottom: 0; }
+.markdown-body a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.markdown-body strong { color: var(--text); }
+.markdown-body blockquote { margin: 18px 0; padding: 2px 18px; border-left: 3px solid var(--accent); color: var(--text-muted); }
+.markdown-body pre { overflow-x: auto; margin: 18px 0; padding: 16px; border-radius: 4px; background: var(--surface-muted); font: .85rem/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; }
+.markdown-body code { padding: 2px 5px; border-radius: 3px; background: var(--surface-muted); font: .88em ui-monospace, SFMono-Regular, Consolas, monospace; }
+.markdown-body pre code { padding: 0; background: transparent; }
+.markdown-body ul, .markdown-body ol { padding-left: 1.4em; }
