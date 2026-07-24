@@ -2,7 +2,7 @@
 
 一个基于 Nuxt 4 构建的轻量级朋友圈 / 动态时间线前端，设计风格参考微信朋友圈，支持明暗模式、RSS 订阅、友链展示和反应互动。
 
-后端 API 由独立的 [blog_api](https://im.081531.xyz) 项目提供，所有数据均来自该项目的公开接口。
+后端 API 由独立的 [blog_api](https://github.com/kmoretti/blog_api) 项目提供，所有数据均来自该项目的公开接口。
 
 ## 技术栈
 
@@ -85,4 +85,4 @@ pnpm preview     # 本地预览构建结果
 
 ## 相关仓库
 
-- 后端 API：[https://im.081531.xyz](https://im.081531.xyz)
+- 后端 API：[https://github.com/kmoretti/blog_api](https://github.com/kmoretti/blog_api)
