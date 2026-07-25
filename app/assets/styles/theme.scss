@@ -269,6 +269,7 @@ button { cursor: pointer; }
   .memo-media.media-count-4 { grid-template-columns: 1fr; }
   .source-link { flex-shrink: 0; }
   .side-rail { display: none; }
+  .site-footer { display: none; }
   .mobile-nav { position: fixed; z-index: 10; right: 12px; bottom: 12px; left: 12px; display: flex; justify-content: space-around; width: calc(100vw - 24px); max-width: calc(100vw - 24px); padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: color.adjust(#ffffff, $alpha: -0.06); backdrop-filter: blur(16px); box-shadow: var(--shadow); }
   .dark .mobile-nav { background: color.adjust(#111111, $alpha: -0.04); }
   .mobile-nav-item { display: grid; place-items: center; gap: 4px; min-width: 64px; min-height: 44px; border: 0; background: transparent; color: var(--text-muted); font-size: .65rem; text-decoration: none; }

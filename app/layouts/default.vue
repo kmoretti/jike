@@ -5,5 +5,6 @@
       <slot />
     </main>
     <JikeFooter />
+    <ScrollToTop />
   </div>
 </template>
