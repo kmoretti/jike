@@ -331,6 +331,18 @@ onMounted(async () => {
   background: var(--surface);
 }
 
+/* 深色模式下评论内容不要高亮边框/背景，文字用白色 */
+.gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-comment-content),
+.dark .gitalk-section .gitalk-container :deep(.gt-container .gt-comment-content) {
+  border-color: transparent;
+  background: var(--surface);
+}
+
+.gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-comment-content:hover),
+.dark .gitalk-section .gitalk-container :deep(.gt-container .gt-comment-content:hover) {
+  background: var(--surface-muted);
+}
+
 .gitalk-container :deep(.gt-container .gt-comment-username) {
   color: var(--text);
   font-weight: 600;
@@ -354,6 +366,13 @@ onMounted(async () => {
 
 .gitalk-container :deep(.gt-container .gt-comment-body) {
   color: var(--text);
+}
+
+.gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-comment-text),
+.gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-comment-body),
+.dark .gitalk-section .gitalk-container :deep(.gt-container .gt-comment-text),
+.dark .gitalk-section .gitalk-container :deep(.gt-container .gt-comment-body) {
+  color: #ffffff;
 }
 
 .gitalk-container :deep(.gt-container .gt-comment-body a) {
