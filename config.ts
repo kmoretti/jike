@@ -64,7 +64,7 @@ export const jikeConfig = {
     metingApi: 'https://meting.081531.xyz/api',
   },
   gitalk: {
-    repo: 'jike-comments',
+    repo: 'jike',
     owner: 'kmoretti',
     admin: ['kmoretti'],
     labels: ['gitalk', 'jike'],
