@@ -45,6 +45,28 @@ function getGitalkConfig() {
   }
 }
 
+function patchGitHubApiProxy() {
+  if (typeof window === 'undefined') return
+  if ((window as any).__gitalkApiPatched) return
+  ;(window as any).__gitalkApiPatched = true
+
+  const useProxy = (runtimeConfig.public.gitalkUseProxy as boolean | undefined)
+  if (!useProxy) return
+
+  const GITHUB_API = 'https://api.github.com/'
+  const PROXY_API = `${window.location.origin}/api/github/`
+
+  const originalOpen = XMLHttpRequest.prototype.open as (method: string, url: string, ...rest: any[]) => void
+  XMLHttpRequest.prototype.open = function (method: string, url: string | URL, ...rest: any[]) {
+    const urlStr = typeof url === 'string' ? url : url.toString()
+    if (urlStr.startsWith(GITHUB_API)) {
+      const proxied = urlStr.replace(GITHUB_API, PROXY_API)
+      return originalOpen.call(this, method, proxied, ...rest)
+    }
+    return originalOpen.call(this, method, urlStr, ...rest)
+  }
+}
+
 let gitalk: InstanceType<typeof Gitalk> | null = null
 
 onMounted(async () => {
@@ -62,6 +84,7 @@ onMounted(async () => {
 
   try {
     console.log('[Gitalk] runtimeConfig.public:', runtimeConfig.public)
+    patchGitHubApiProxy()
     const { default: GitalkCtor } = await import('gitalk')
     gitalk = new GitalkCtor(config)
     gitalk.render(gitalkEl.value)

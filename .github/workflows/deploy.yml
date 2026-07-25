@@ -37,6 +37,7 @@ jobs:
           NUXT_PUBLIC_GITALK_OWNER: ${{ vars.NUXT_PUBLIC_GITALK_OWNER }}
           NUXT_PUBLIC_GITALK_ADMIN: ${{ vars.NUXT_PUBLIC_GITALK_ADMIN }}
           NUXT_PUBLIC_GITALK_PROXY: ${{ vars.NUXT_PUBLIC_GITALK_PROXY }}
+          NUXT_PUBLIC_GITALK_GH_TOKEN: ${{ secrets.NUXT_PUBLIC_GITALK_GH_TOKEN }}
         run: pnpm build
 
       - name: Deploy to Cloudflare Pages

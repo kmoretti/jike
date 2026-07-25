@@ -27,6 +27,7 @@ export default defineNuxtConfig({
       gitalkOwner: process.env.NUXT_PUBLIC_GITALK_OWNER || jikeConfig.gitalk.owner,
       gitalkAdmin: process.env.NUXT_PUBLIC_GITALK_ADMIN || jikeConfig.gitalk.admin.join(','),
       gitalkProxy: process.env.NUXT_PUBLIC_GITALK_PROXY || jikeConfig.gitalk.proxy || '',
+      gitalkUseProxy: !!process.env.NUXT_PUBLIC_GITALK_GH_TOKEN,
     },
   },
   colorMode: {
