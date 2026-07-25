@@ -10,6 +10,8 @@ console.log('[build] Gitalk env vars present:', {
   repo: process.env.NUXT_PUBLIC_GITALK_REPO || jikeConfig.gitalk.repo,
   owner: process.env.NUXT_PUBLIC_GITALK_OWNER || jikeConfig.gitalk.owner,
   admin: process.env.NUXT_PUBLIC_GITALK_ADMIN || jikeConfig.gitalk.admin.join(','),
+  ghToken: !!process.env.NUXT_PUBLIC_GITALK_GH_TOKEN,
+  useProxy: process.env.NUXT_PUBLIC_GITALK_USE_PROXY !== 'false',
 })
 
 export default defineNuxtConfig({
@@ -27,7 +29,7 @@ export default defineNuxtConfig({
       gitalkOwner: process.env.NUXT_PUBLIC_GITALK_OWNER || jikeConfig.gitalk.owner,
       gitalkAdmin: process.env.NUXT_PUBLIC_GITALK_ADMIN || jikeConfig.gitalk.admin.join(','),
       gitalkProxy: process.env.NUXT_PUBLIC_GITALK_PROXY || jikeConfig.gitalk.proxy || '',
-      gitalkUseProxy: !!process.env.NUXT_PUBLIC_GITALK_GH_TOKEN,
+      gitalkUseProxy: process.env.NUXT_PUBLIC_GITALK_USE_PROXY !== 'false',
     },
   },
   colorMode: {

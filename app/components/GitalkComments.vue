@@ -51,7 +51,10 @@ function getGitalkConfig() {
     pagerDirection: jikeConfig.gitalk.pagerDirection,
     createIssueManually: jikeConfig.gitalk.createIssueManually,
     distractionFreeMode: jikeConfig.gitalk.distractionFreeMode,
-    proxy: (runtimeConfig.public.gitalkProxy as string | undefined) || jikeConfig.gitalk.proxy,
+    proxy: (runtimeConfig.public.gitalkProxy as string | undefined)
+      || (runtimeConfig.public.gitalkUseProxy && typeof window !== 'undefined'
+        ? `${window.location.origin}/api/github-oauth`
+        : jikeConfig.gitalk.proxy),
   }
 }
 
@@ -61,19 +64,44 @@ function patchGitHubApiProxy() {
   ;(window as any).__gitalkApiPatched = true
 
   const useProxy = (runtimeConfig.public.gitalkUseProxy as boolean | undefined)
+  console.log('[Gitalk] useProxy:', useProxy)
   if (!useProxy) return
 
   const GITHUB_API = 'https://api.github.com/'
   const PROXY_API = `${window.location.origin}/api/github/`
 
+  // Patch XMLHttpRequest（gitalk 内部部分请求走 XHR）
   const originalOpen = XMLHttpRequest.prototype.open as (method: string, url: string, ...rest: any[]) => void
   XMLHttpRequest.prototype.open = function (method: string, url: string | URL, ...rest: any[]) {
     const urlStr = typeof url === 'string' ? url : url.toString()
     if (urlStr.startsWith(GITHUB_API)) {
       const proxied = urlStr.replace(GITHUB_API, PROXY_API)
+      console.log('[Gitalk] proxy XHR:', urlStr, '->', proxied)
       return originalOpen.call(this, method, proxied, ...rest)
     }
     return originalOpen.call(this, method, urlStr, ...rest)
+  }
+
+  // Patch fetch（gitalk 新版可能走 fetch）
+  const originalFetch = window.fetch
+  window.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+    if (typeof input === 'string' && input.startsWith(GITHUB_API)) {
+      const proxied = input.replace(GITHUB_API, PROXY_API)
+      console.log('[Gitalk] proxy fetch:', input, '->', proxied)
+      return originalFetch(proxied, init)
+    }
+    if (input instanceof URL && input.toString().startsWith(GITHUB_API)) {
+      const proxied = input.toString().replace(GITHUB_API, PROXY_API)
+      console.log('[Gitalk] proxy fetch:', input.toString(), '->', proxied)
+      return originalFetch(proxied, init)
+    }
+    if (input instanceof Request && input.url.startsWith(GITHUB_API)) {
+      const proxied = input.url.replace(GITHUB_API, PROXY_API)
+      const newRequest = new Request(proxied, input)
+      console.log('[Gitalk] proxy fetch:', input.url, '->', proxied)
+      return originalFetch(newRequest)
+    }
+    return originalFetch(input, init)
   }
 }
 
