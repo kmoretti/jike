@@ -110,7 +110,11 @@ export function useJikeApi() {
     return request<PaginatedResponse<ApiRssPost>>(`/api/public/rss/?${params.toString()}`)
   }
 
-  return { baseURL, getVerifyConfig, getMoments, getFriendLinks, getRssPosts, issueAntiBotToken, createFingerprint, changeReaction }
+  async function refreshRssPosts() {
+    return request<{ message: string; feed_count: number }>('/api/public/rss/refresh', { method: 'POST' })
+  }
+
+  return { baseURL, getVerifyConfig, getMoments, getFriendLinks, getRssPosts, refreshRssPosts, issueAntiBotToken, createFingerprint, changeReaction }
 }
 
 function normalizeMoment(item: ApiMoment): Moment {

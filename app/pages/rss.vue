@@ -6,10 +6,16 @@
     </NuxtLink>
     <div class="toolbar">
       <span class="toolbar-label">{{ total ? `${total} 篇文章` : 'RSS 文章' }}</span>
-      <button class="text-button" type="button" :disabled="loading" @click="load(1, false)">
-        <Icon name="lucide:refresh-cw" :class="{ spinning: loading && !posts.length }" />
-        {{ loading && !posts.length ? '加载中' : '刷新' }}
-      </button>
+      <div class="toolbar-actions">
+        <button class="text-button" type="button" :disabled="refreshing" @click="refresh">
+          <Icon name="lucide:rss" :class="{ spinning: refreshing }" />
+          {{ refreshing ? '抓取中' : '抓取 RSS' }}
+        </button>
+        <button class="text-button" type="button" :disabled="loading" @click="load(1, false)">
+          <Icon name="lucide:refresh-cw" :class="{ spinning: loading && !posts.length }" />
+          {{ loading && !posts.length ? '加载中' : '刷新' }}
+        </button>
+      </div>
     </div>
 
     <div v-if="loading && !posts.length" class="memo-list" aria-label="正在加载">
@@ -52,6 +58,7 @@ const total = useState('jike-rss-total', () => 0)
 const page = useState('jike-rss-page', () => 1)
 const pageSize = jikeConfig.pagination.rss
 const loading = useState('jike-rss-loading', () => false)
+const refreshing = useState('jike-rss-refreshing', () => false)
 const error = useState<string | null>('jike-rss-error', () => null)
 
 async function load(targetPage = 1, append = false) {
@@ -74,6 +81,22 @@ async function load(targetPage = 1, append = false) {
 function loadMore() { if (posts.value.length < total.value) load(page.value + 1, true) }
 function reload() { load(1, false) }
 
+async function refresh() {
+  if (refreshing.value) return
+  refreshing.value = true
+  error.value = null
+  try {
+    await api.refreshRssPosts()
+    // Give the backend a moment to persist articles, then reload the list.
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    await load(1, false)
+  } catch (cause) {
+    error.value = cause instanceof Error ? cause.message : 'RSS 抓取失败，请稍后重试'
+  } finally {
+    refreshing.value = false
+  }
+}
+
 function formatDate(ts: number) {
   if (!ts) return ''
   const d = new Date(ts * 1000)
@@ -92,6 +115,7 @@ onMounted(reload)
 </script>
 
 <style scoped>
+.toolbar-actions { display: flex; align-items: center; gap: 8px; }
 .skeleton-card { min-height: 110px; border: 1px solid var(--line); border-radius: 8px; background: linear-gradient(100deg, var(--surface) 30%, var(--surface-muted) 45%, var(--surface) 60%); background-size: 300% 100%; animation: skeleton 1.6s ease-in-out infinite; }
 .spinning { animation: spin .8s linear infinite; }
 @keyframes skeleton { to { background-position: -200% 0; } }
