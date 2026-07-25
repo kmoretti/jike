@@ -18,7 +18,17 @@ const gitalkEl = ref<HTMLElement | null>(null)
 const colorMode = useColorMode()
 const runtimeConfig = useRuntimeConfig()
 
-const isDark = computed(() => colorMode.value === 'dark')
+const isDark = ref(false)
+
+function detectDark() {
+  if (typeof document === 'undefined') return false
+  return document.documentElement.classList.contains('dark')
+}
+
+watch(() => colorMode.value, () => {
+  isDark.value = detectDark()
+}, { immediate: true })
+
 const themeClass = computed(() => isDark.value ? 'gitalk-theme-dark' : 'gitalk-theme-light')
 
 function getGitalkConfig() {
@@ -123,15 +133,23 @@ onMounted(async () => {
   font-family: inherit;
 }
 
-/* 暗色模式通过滤镜反转，并对头像/图标二次反转保持正常 */
-.gitalk-section.is-dark .gitalk-container :deep(.gt-container) {
-  filter: invert(1) hue-rotate(180deg);
+/* 暗色模式：先给容器明亮的背景和深色文字，再整体滤镜反转，
+   避免透明区域继承页面暗色背景后文字也变成深色 */
+.gitalk-section.is-dark .gitalk-container :deep(.gt-container),
+.dark .gitalk-section .gitalk-container :deep(.gt-container) {
+  background-color: #ffffff;
+  color: #000000;
+  filter: invert(1) hue-rotate(180deg) contrast(1.05);
 }
 
 .gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-avatar img),
 .gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-ico svg),
 .gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-ico-text),
-.gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-btn-icon svg) {
+.gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-btn-icon svg),
+.dark .gitalk-section .gitalk-container :deep(.gt-container .gt-avatar img),
+.dark .gitalk-section .gitalk-container :deep(.gt-container .gt-ico svg),
+.dark .gitalk-section .gitalk-container :deep(.gt-container .gt-ico-text),
+.dark .gitalk-section .gitalk-container :deep(.gt-container .gt-btn-icon svg) {
   filter: invert(1) hue-rotate(180deg);
 }
 
