@@ -1,5 +1,6 @@
 <template>
   <section class="gitalk-section" :class="{ inline, 'is-dark': isDark }">
+    <h3 class="gitalk-title">评论</h3>
     <div ref="gitalkEl" class="gitalk-container" />
   </section>
 </template>
@@ -152,6 +153,13 @@ onMounted(async () => {
   margin-top: 12px;
 }
 
+.gitalk-title {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
 .gitalk-container {
   width: 100%;
   min-height: 200px;
@@ -162,22 +170,13 @@ onMounted(async () => {
   color: var(--text);
 }
 
-/* Header: comment count + current user */
+/* Header: current user, placed above the input area */
 .gitalk-container :deep(.gt-container .gt-header) {
-  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--line);
-}
-
-.gitalk-container :deep(.gt-container .gt-header::before) {
-  content: '评论';
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text);
+  justify-content: flex-end;
+  margin-bottom: 12px;
+  gap: 8px;
 }
 
 .gitalk-container :deep(.gt-container .gt-header .gt-counts) {
@@ -185,6 +184,9 @@ onMounted(async () => {
 }
 
 .gitalk-container :deep(.gt-container .gt-user) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: var(--text-muted);
   font-size: 0.85rem;
 }
