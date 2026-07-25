@@ -2,6 +2,14 @@ declare const process: {
   env: Record<string, string | undefined>
 }
 
+console.log('[build] Gitalk env vars present:', {
+  clientId: !!process.env.NUXT_PUBLIC_GITALK_CLIENT_ID,
+  clientSecret: !!process.env.NUXT_PUBLIC_GITALK_CLIENT_SECRET,
+  repo: process.env.NUXT_PUBLIC_GITALK_REPO,
+  owner: process.env.NUXT_PUBLIC_GITALK_OWNER,
+  admin: process.env.NUXT_PUBLIC_GITALK_ADMIN,
+})
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   srcDir: 'app/',

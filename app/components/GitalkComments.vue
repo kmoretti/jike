@@ -53,7 +53,12 @@ onMounted(async () => {
   if (!gitalkEl.value) return
   const config = getGitalkConfig()
   if (!config.clientID || !config.clientSecret || !config.repo || !config.owner) {
-    console.warn('[Gitalk] 配置不完整，跳过评论渲染')
+    console.warn('[Gitalk] 配置不完整，跳过评论渲染', {
+      hasClientID: !!config.clientID,
+      hasClientSecret: !!config.clientSecret,
+      repo: config.repo,
+      owner: config.owner,
+    })
     return
   }
 
