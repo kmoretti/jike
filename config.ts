@@ -5,6 +5,19 @@ export interface JikeNavItem {
   href?: string
 }
 
+export interface GitalkConfig {
+  repo: string
+  owner: string
+  admin: string[]
+  labels: string[]
+  language: string
+  perPage: number
+  pagerDirection: 'last' | 'first'
+  createIssueManually: boolean
+  distractionFreeMode: boolean
+  proxy?: string
+}
+
 const adminURL = 'https://blog-api.2005815.xyz/panel'
 const adminEmbed = true
 
@@ -50,6 +63,18 @@ export const jikeConfig = {
   music: {
     metingApi: 'https://meting.081531.xyz/api',
   },
+  gitalk: {
+    repo: 'jike-comments',
+    owner: 'kmoretti',
+    admin: ['kmoretti'],
+    labels: ['gitalk', 'jike'],
+    language: 'zh-CN',
+    perPage: 10,
+    pagerDirection: 'last',
+    createIssueManually: false,
+    distractionFreeMode: false,
+    proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+  } satisfies GitalkConfig,
 } as const
 
 export type JikeReaction = (typeof jikeConfig.reactions)[number]

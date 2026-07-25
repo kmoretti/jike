@@ -7,6 +7,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: '',
+      gitalkClientID: '',
+      gitalkClientSecret: '',
+      gitalkRepo: '',
+      gitalkOwner: '',
+      gitalkAdmin: '',
+      gitalkProxy: '',
     },
   },
   colorMode: {
@@ -28,6 +34,7 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'stylesheet', href: '/css/APlayer.min.css' },
+        { rel: 'stylesheet', href: '/css/gitalk.css' },
       ],
       script: [
         { src: '/js/APlayer.min.js', async: true, defer: true },

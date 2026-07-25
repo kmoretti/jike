@@ -3,6 +3,7 @@
     <NuxtLink class="back-link" to="/">← 返回时间线</NuxtLink>
     <div v-if="moment" class="memo-list">
       <MemoCard :moment="moment" @reaction="reaction => toggle(moment!, reaction)" />
+      <GitalkComments :id="moment.id" :title="`说说 #${moment.id}`" />
     </div>
     <EmptyState v-else-if="error" title="找不到这条动态" :message="error" action-label="返回首页" @action="navigateTo('/')" />
     <div v-else class="memo-card skeleton-card"></div>
@@ -24,7 +25,7 @@ onMounted(async () => {
     moment.value = result.items.find(item => item.id === id) || null
     if (!moment.value) error.value = '这条动态不存在或已被隐藏'
   } catch (cause) {
-    error.value = cause instanceof Error ? cause.message : '动态加载失败'
+    error.value = cause instanceof Error ? cause.message : '动态加载失败，请稍后重试'
   }
 })
 </script>

@@ -22,8 +22,25 @@
         <div class="memo-footer">
           <NuxtLink :to="`/memo/${moment.id}`" class="memo-date">{{ formatDate(moment.createdAt) }}</NuxtLink>
           <a v-if="moment.messageLink" class="source-link" :href="moment.messageLink" target="_blank" rel="noopener noreferrer">来源 <Icon name="lucide:arrow-up-right" /></a>
+          <button
+            type="button"
+            class="comment-button"
+            :class="{ open: commentOpen }"
+            :aria-expanded="commentOpen"
+            aria-label="评论"
+            @click="commentOpen = !commentOpen"
+          >
+            <Icon name="lucide:message-square" />
+            <span>评论</span>
+          </button>
           <MemoReactions :moment="moment" @change="$emit('reaction', $event)" />
         </div>
+        <GitalkComments
+          v-if="commentOpen"
+          :id="moment.id"
+          :title="`说说 #${moment.id}`"
+          inline
+        />
       </div>
     </div>
   </article>
@@ -37,6 +54,8 @@ import ExtensionRenderer from './moments-extension/ExtensionRenderer.vue'
 
 const props = defineProps<{ moment: Moment }>()
 defineEmits<{ reaction: [reaction: JikeReaction] }>()
+
+const commentOpen = ref(false)
 
 const legacyMusic = computed(() => {
   const ext = props.moment.extension
