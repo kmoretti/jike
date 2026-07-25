@@ -187,10 +187,10 @@ button { cursor: pointer; }
 .memo-side { flex: 0 0 auto; }
 .memo-avatar { width: 44px; height: 44px; border-radius: 6px; }
 .memo-body { flex: 1; min-width: 0; }
-.memo-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.memo-header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 4px; }
 .memo-author-name { color: var(--accent); font-size: .95rem; font-weight: 600; text-decoration: none; }
 .memo-author-name:hover { text-decoration: underline; }
-.memo-content { font-size: .95rem; line-height: 1.6; overflow-wrap: anywhere; }
+.memo-content { font-size: .95rem; line-height: 1.6; overflow-wrap: anywhere; word-break: break-word; }
 .memo-content p { margin: 0 0 .35rem; }
 .memo-content p:last-child { margin-bottom: 0; }
 .memo-media { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin-top: 12px; }
@@ -203,13 +203,13 @@ button { cursor: pointer; }
 .memo-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; font-size: .75rem; }
 .memo-tags a { color: var(--accent); }
 .memo-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 12px; color: var(--text-muted); font-size: .75rem; }
-.memo-date { color: var(--text-muted); }
+.memo-date { min-width: 0; overflow: hidden; color: var(--text-muted); text-overflow: ellipsis; white-space: nowrap; }
 .memo-date:hover, .source-link:hover, .memo-tags a:hover { color: var(--accent); }
 .meta-badge { padding: 1px 5px; border-radius: 2px; font-size: .6rem; font-weight: 700; letter-spacing: .04em; }
 .pinned-badge { background: var(--accent-soft); color: var(--accent); }
 .ad-badge { background: var(--surface-muted); color: var(--text-muted); }
 .source-link { display: inline-flex; align-items: center; gap: 4px; color: var(--text-muted); }
-.memo-reactions { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.memo-reactions { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; max-width: 100%; }
 .reaction-button { display: inline-flex; align-items: center; gap: 4px; min-height: 26px; padding: 3px 8px; border: 1px solid transparent; border-radius: 12px; background: var(--surface-muted); color: var(--text-muted); font-size: .8rem; transition: all .2s ease; }
 .reaction-button:hover, .reaction-button.selected { border-color: var(--line); background: var(--accent-soft); color: var(--text); }
 .reaction-button small { font-weight: 700; font-size: .7rem; }
@@ -239,7 +239,7 @@ button { cursor: pointer; }
 .ext-title { display: block; overflow: hidden; color: var(--text); font-size: .88rem; font-weight: 600; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
 .ext-desc { display: block; margin-top: 2px; color: var(--text-muted); font-size: .72rem; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ext-desc.multiline { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; white-space: normal; }
-.ext-sub { display: inline-flex; align-items: center; gap: 6px; margin-top: 5px; color: var(--text-muted); font-size: .7rem; }
+.ext-sub { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 5px; color: var(--text-muted); font-size: .7rem; }
 .ext-sub-divider { width: 1px; height: 10px; background: var(--line); }
 .ext-music { display: flex; align-items: center; gap: 10px; padding: 12px; }
 .ext-play { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-left: auto; border-radius: 50%; background: var(--surface); border: 1px solid var(--line); color: var(--accent); }
@@ -259,9 +259,10 @@ button { cursor: pointer; }
   .profile-avatar { width: 66px; height: 66px; }
   .profile-copy strong { font-size: 1.15rem; }
   .profile-copy span { max-width: 190px; font-size: .68rem; }
-  .timeline-shell { padding: 20px 14px 82px; }
+  .timeline-shell { padding: 20px 16px 82px; }
   .memo-card { padding: 14px 0; }
-  .memo-body { padding-right: 12px; }
+  .memo-body { padding-right: 16px; }
+  .memo-reactions { width: 100%; margin-top: 8px; margin-left: 0; justify-content: flex-end; }
   .memo-media { grid-template-columns: 1fr; }
   .memo-media.media-count-1,
   .memo-media.media-count-2,
