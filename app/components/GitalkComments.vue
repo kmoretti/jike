@@ -27,7 +27,7 @@ function getGitalkConfig() {
   const envAdmin = runtimeConfig.public.gitalkAdmin as string | undefined
 
   return {
-    clientID: (runtimeConfig.public.gitalkClientID as string | undefined) || '',
+    clientID: (runtimeConfig.public.gitalkClientId as string | undefined) || '',
     clientSecret: (runtimeConfig.public.gitalkClientSecret as string | undefined) || '',
     repo: (runtimeConfig.public.gitalkRepo as string | undefined) || jikeConfig.gitalk.repo,
     owner: (runtimeConfig.public.gitalkOwner as string | undefined) || jikeConfig.gitalk.owner,

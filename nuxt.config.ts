@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: '',
-      gitalkClientID: '',
+      gitalkClientId: '',
       gitalkClientSecret: '',
       gitalkRepo: '',
       gitalkOwner: '',
