@@ -1,3 +1,7 @@
+declare const process: {
+  env: Record<string, string | undefined>
+}
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   srcDir: 'app/',
@@ -6,13 +10,13 @@ export default defineNuxtConfig({
   modules: ['@nuxt/icon', '@nuxtjs/color-mode', '@vueuse/nuxt'],
   runtimeConfig: {
     public: {
-      apiBase: '',
-      gitalkClientId: '',
-      gitalkClientSecret: '',
-      gitalkRepo: '',
-      gitalkOwner: '',
-      gitalkAdmin: '',
-      gitalkProxy: '',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || '',
+      gitalkClientId: process.env.NUXT_PUBLIC_GITALK_CLIENT_ID || '',
+      gitalkClientSecret: process.env.NUXT_PUBLIC_GITALK_CLIENT_SECRET || '',
+      gitalkRepo: process.env.NUXT_PUBLIC_GITALK_REPO || '',
+      gitalkOwner: process.env.NUXT_PUBLIC_GITALK_OWNER || '',
+      gitalkAdmin: process.env.NUXT_PUBLIC_GITALK_ADMIN || '',
+      gitalkProxy: process.env.NUXT_PUBLIC_GITALK_PROXY || '',
     },
   },
   colorMode: {
