@@ -43,6 +43,8 @@
       <button v-if="hasMore" class="load-more" type="button" :disabled="loading" @click="loadMore">
         {{ loading ? '加载中…' : '加载更多' }}
       </button>
+
+      <FriendApplyForm />
     </div>
 
     <MobileNav @refresh="reload" />

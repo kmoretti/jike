@@ -67,6 +67,48 @@ export interface ApiFriendLink {
   snapshot?: string
 }
 
+export interface FriendLinkApplyReq {
+  name: string
+  link: string
+  avatar: string
+  description?: string
+  email: string
+  snapshot?: string
+  friend_link_page?: string
+  feed?: string
+  enable_rss: boolean
+  turnstile_token?: string
+}
+
+export interface FriendLinkUpdateApplyReq {
+  original_url: string
+  name: string
+  link: string
+  avatar: string
+  description?: string
+  email: string
+  snapshot?: string
+  friend_link_page?: string
+  feed?: string
+  enable_rss: boolean
+  turnstile_token?: string
+}
+
+export interface FriendLinkSubmission {
+  id: number
+  name: string
+  description?: string
+  status: string
+  updated_at: number
+}
+
+export interface FriendSubmissionsResponse {
+  submissions: FriendLinkSubmission[]
+  total: number
+  page: number
+  page_size: number
+}
+
 export interface ApiRssPost {
   id: number
   rss_id: number

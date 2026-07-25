@@ -1,4 +1,4 @@
-import type { AntiBotResponse, ApiFriendLink, ApiMoment, ApiRssPost, ApiResponse, FingerprintResponse, PaginatedResponse, VerifyConfigResponse } from '../types/api'
+import type { AntiBotResponse, ApiFriendLink, ApiMoment, ApiRssPost, ApiResponse, FingerprintResponse, FriendLinkApplyReq, FriendLinkSubmission, FriendSubmissionsResponse, FriendLinkUpdateApplyReq, PaginatedResponse, VerifyConfigResponse } from '../types/api'
 import type { Moment, MomentExtension, MomentsPage } from '../types/moment'
 import type { JikeReaction } from '../../config'
 import { jikeConfig } from '../../config'
@@ -104,6 +104,26 @@ export function useJikeApi() {
     )
   }
 
+  async function applyFriendLink(body: FriendLinkApplyReq): Promise<string> {
+    const data = await request<{ id: number; status: string; message: string }>('/api/public/friend/apply', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    })
+    return data.message || '友链申请已提交'
+  }
+
+  async function updateApplyFriendLink(body: FriendLinkUpdateApplyReq): Promise<string> {
+    const data = await request<{ id: number; original_id: number; status: string; message: string }>('/api/public/friend/update-apply', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    })
+    return data.message || '友链更新申请已提交'
+  }
+
+  async function getFriendSubmissions(query = ''): Promise<FriendSubmissionsResponse> {
+    return request<FriendSubmissionsResponse>(`/api/public/friend/submissions${query ? `?${query}` : ''}`)
+  }
+
   async function getRssPosts(page = 1, pageSize = 20, friendLinkID?: number) {
     const params = new URLSearchParams({ page: String(page), page_size: String(pageSize) })
     if (friendLinkID) params.set('friend_link_id', String(friendLinkID))
@@ -114,7 +134,20 @@ export function useJikeApi() {
     return request<{ message: string; feed_count: number }>('/api/public/rss/refresh', { method: 'POST' })
   }
 
-  return { baseURL, getVerifyConfig, getMoments, getFriendLinks, getRssPosts, refreshRssPosts, issueAntiBotToken, createFingerprint, changeReaction }
+  return {
+    baseURL,
+    getVerifyConfig,
+    getMoments,
+    getFriendLinks,
+    applyFriendLink,
+    updateApplyFriendLink,
+    getFriendSubmissions,
+    getRssPosts,
+    refreshRssPosts,
+    issueAntiBotToken,
+    createFingerprint,
+    changeReaction,
+  }
 }
 
 function normalizeMoment(item: ApiMoment): Moment {

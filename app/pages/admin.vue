@@ -6,8 +6,8 @@
     </NuxtLink>
     <h1 class="page-title">后台管理</h1>
 
-    <div v-if="!jikeConfig.site.adminEmbed" class="admin-fallback">
-      <p>后台管理需要在新标签页中打开。</p>
+    <div v-if="!jikeConfig.site.adminEmbed || turnstileEnabled" class="admin-fallback">
+      <p>{{ turnstileEnabled ? '当前后台启用了 Turnstile 验证，为避免域名冲突，请在新标签页中打开。' : '后台管理需要在新标签页中打开。' }}</p>
       <a class="admin-cta" :href="jikeConfig.site.adminURL" target="_blank" rel="noopener noreferrer">
         <Icon name="lucide:external-link" />
         打开后台
@@ -39,10 +39,22 @@ import { jikeConfig } from '../../config'
 
 useHead({ title: `后台 · ${jikeConfig.site.name}`, meta: [{ name: 'description', content: '后台管理' }] })
 
+const api = useJikeApi()
 const iframe = ref<HTMLIFrameElement | null>(null)
 const errored = ref(false)
+const turnstileEnabled = ref(false)
 let timeout: ReturnType<typeof setTimeout> | null = null
 let loaded = false
+
+async function loadVerifyConfig() {
+  if (!import.meta.client) return
+  try {
+    const config = await api.getVerifyConfig()
+    turnstileEnabled.value = config.turnstile.enable
+  } catch {
+    turnstileEnabled.value = false
+  }
+}
 
 function onLoad() {
   loaded = true
@@ -65,7 +77,8 @@ function onError() {
   errored.value = true
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await loadVerifyConfig()
   // 6 秒未触发 load 也回退
   timeout = setTimeout(() => { if (!loaded) onError() }, 6000)
 })
