@@ -60,9 +60,10 @@ async function load(targetPage = 1, append = false) {
   error.value = null
   try {
     const data = await api.getRssPosts(targetPage, pageSize)
+    const items = data.items ?? []
     page.value = data.page
     total.value = data.total
-    posts.value = append ? [...posts.value, ...data.items] : data.items
+    posts.value = append ? [...posts.value, ...items] : items
   } catch (cause) {
     error.value = cause instanceof Error ? cause.message : '文章加载失败，请稍后重试'
   } finally {
