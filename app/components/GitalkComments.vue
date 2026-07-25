@@ -143,9 +143,9 @@ onMounted(async () => {
 .gitalk-section {
   margin-top: 16px;
   padding: 16px;
-  border-radius: 8px;
-  background: var(--surface-muted);
-  box-shadow: inset 0 1px 0 var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
 }
 
 .gitalk-section.inline {
@@ -159,33 +159,288 @@ onMounted(async () => {
 
 .gitalk-container :deep(.gt-container) {
   font-family: inherit;
+  color: var(--text);
 }
 
-/* 暗色模式：先给容器明亮的背景和深色文字，再整体滤镜反转，
-   避免透明区域继承页面暗色背景后文字也变成深色 */
-.gitalk-section.is-dark .gitalk-container :deep(.gt-container),
-.dark .gitalk-section .gitalk-container :deep(.gt-container) {
-  background-color: #ffffff;
-  color: #000000;
-  filter: invert(1) hue-rotate(180deg) contrast(1.05);
+/* Header: comment count + current user */
+.gitalk-container :deep(.gt-container .gt-header) {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
 }
 
-.gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-avatar img),
-.gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-ico svg),
-.gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-ico-text),
-.gitalk-section.is-dark .gitalk-container :deep(.gt-container .gt-btn-icon svg),
-.dark .gitalk-section .gitalk-container :deep(.gt-container .gt-avatar img),
-.dark .gitalk-section .gitalk-container :deep(.gt-container .gt-ico svg),
-.dark .gitalk-section .gitalk-container :deep(.gt-container .gt-ico-text),
-.dark .gitalk-section .gitalk-container :deep(.gt-container .gt-btn-icon svg) {
-  filter: invert(1) hue-rotate(180deg);
+.gitalk-container :deep(.gt-container .gt-header::before) {
+  content: '评论';
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.gitalk-container :deep(.gt-container .gt-header .gt-counts) {
+  display: none;
+}
+
+.gitalk-container :deep(.gt-container .gt-user) {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.gitalk-container :deep(.gt-container .gt-user-pic img) {
+  border-radius: 50%;
+  border: 2px solid var(--line);
+}
+
+/* Comment input area */
+.gitalk-container :deep(.gt-container .gt-header-comment) {
+  margin-bottom: 16px;
+}
+
+.gitalk-container :deep(.gt-container .gt-header-textarea) {
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-muted);
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gitalk-container :deep(.gt-container .gt-header-textarea::placeholder) {
+  color: var(--text-muted);
+}
+
+.gitalk-container :deep(.gt-container .gt-header-textarea:hover),
+.gitalk-container :deep(.gt-container .gt-header-textarea:focus) {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.gitalk-container :deep(.gt-container .gt-header-preview) {
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-muted);
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Controls: markdown tip + buttons */
+.gitalk-container :deep(.gt-container .gt-header-controls) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.gitalk-container :deep(.gt-container .gt-header-controls-tip) {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.gitalk-container :deep(.gt-container .gt-header-controls .gt-btn) {
+  margin-left: 10px;
+}
+
+/* Buttons */
+.gitalk-container :deep(.gt-container .gt-btn) {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-muted);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gitalk-container :deep(.gt-container .gt-btn:hover) {
+  background: var(--surface);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.gitalk-container :deep(.gt-container .gt-btn-public) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.gitalk-container :deep(.gt-container .gt-btn-public:hover) {
+  filter: brightness(1.1);
+  color: #ffffff;
+}
+
+.gitalk-container :deep(.gt-container .gt-btn.is--disable) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Login button */
+.gitalk-container :deep(.gt-container .gt-btn-login) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.gitalk-container :deep(.gt-container .gt-btn-login:hover) {
+  filter: brightness(1.1);
+  color: #ffffff;
+}
+
+/* Links */
+.gitalk-container :deep(.gt-container .gt-link) {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.gitalk-container :deep(.gt-container .gt-link:hover) {
+  text-decoration: underline;
+}
+
+/* Comments list */
+.gitalk-container :deep(.gt-container .gt-comments) {
+  margin-top: 20px;
+}
+
+.gitalk-container :deep(.gt-container .gt-comment) {
+  margin-bottom: 16px;
+}
+
+.gitalk-container :deep(.gt-container .gt-comment-content) {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-muted);
+  transition: background 0.2s ease;
+}
+
+.gitalk-container :deep(.gt-container .gt-comment-content:hover) {
+  background: var(--surface);
+}
+
+.gitalk-container :deep(.gt-container .gt-comment-username) {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.gitalk-container :deep(.gt-container .gt-comment-username:hover) {
+  color: var(--accent);
+}
+
+.gitalk-container :deep(.gt-container .gt-comment-date) {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.gitalk-container :deep(.gt-container .gt-comment-text) {
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.gitalk-container :deep(.gt-container .gt-comment-body) {
+  color: var(--text);
+}
+
+.gitalk-container :deep(.gt-container .gt-comment-body a) {
+  color: var(--accent);
+}
+
+.gitalk-container :deep(.gt-container .gt-comment-like,
+  .gt-container .gt-comment-edit,
+  .gt-container .gt-comment-reply) {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.gitalk-container :deep(.gt-container .gt-comment-like:hover,
+  .gt-container .gt-comment-edit:hover,
+  .gt-container .gt-comment-reply:hover) {
+  color: var(--accent);
+}
+
+/* Empty state / initing / error */
+.gitalk-container :deep(.gt-container .gt-comments-null) {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.gitalk-container :deep(.gt-container .gt-initing) {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 40px 16px;
+}
+
+.gitalk-container :deep(.gt-container .gt-error) {
+  padding: 16px;
+  border-radius: 10px;
+  background: rgba(220, 38, 38, 0.1);
+  color: #ef4444;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Pagination */
+.gitalk-container :deep(.gt-container .gt-comments-controls .gt-btn) {
+  margin: 0 4px;
+}
+
+/* Avatar sizing consistency */
+.gitalk-container :deep(.gt-container .gt-avatar img) {
+  border-radius: 50%;
+}
+
+/* Markdown content inside comments */
+.gitalk-container :deep(.gt-container .gt-comment-body .markdown-body) {
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.gitalk-container :deep(.gt-container .gt-comment-body .markdown-body pre) {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.gitalk-container :deep(.gt-container .gt-comment-body .markdown-body code) {
+  background: var(--surface);
+  color: var(--text);
 }
 
 /* 移动端减少内边距，避免评论框过窄 */
 @media (max-width: 640px) {
   .gitalk-section {
     padding: 12px;
-    border-radius: 6px;
+    border-radius: 10px;
+  }
+
+  .gitalk-container :deep(.gt-container .gt-header-controls) {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .gitalk-container :deep(.gt-container .gt-header-controls-tip) {
+    width: 100%;
+  }
+
+  .gitalk-container :deep(.gt-container .gt-btn) {
+    flex: 1;
+    margin-left: 0;
   }
 }
 </style>
