@@ -63,7 +63,7 @@ export const jikeConfig = {
   nav: [
     { label: '友链', icon: 'lucide:link', to: '/friends' },
     { label: 'RSS', icon: 'lucide:rss', to: '/rss' },
-    { label: '动态', icon: 'lucide:rss', href: momentFeedURL },
+    { label: '动态', icon: 'lucide:activity', href: momentFeedURL },
     ...(adminEmbed
       ? [{ label: '后台', icon: 'lucide:settings', to: '/admin' } as const]
       : [{ label: '后台', icon: 'lucide:settings', href: adminURL } as const]),
