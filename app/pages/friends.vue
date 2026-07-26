@@ -44,6 +44,7 @@
         {{ loading ? '加载中…' : '加载更多' }}
       </button>
 
+      <MySiteInfo />
       <FriendApplyForm />
     </div>
 

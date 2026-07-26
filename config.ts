@@ -20,6 +20,8 @@ export interface GitalkConfig {
 
 const adminURL = 'https://blog-api.2005815.xyz/panel'
 const adminEmbed = true
+const apiBaseURL = 'https://blog-api.2005815.xyz'
+const momentFeedURL = `${apiBaseURL}/api/public/moments/feed`
 
 export const jikeConfig = {
   site: {
@@ -33,9 +35,10 @@ export const jikeConfig = {
     },
     adminURL,
     adminEmbed,
+    rss: momentFeedURL,
   },
   api: {
-    baseURL: 'https://blog-api.2005815.xyz',
+    baseURL: apiBaseURL,
     pageSize: 10,
     probePageSize: 1,
   },
@@ -47,10 +50,20 @@ export const jikeConfig = {
     // 友链申请表单中「我已添加 xxx 的友情链接」里显示的站点名
     // 留空则使用 site.name
     applyConditionSiteName: '喵洛阁',
+    // 展示在友链页面的「本站信息」卡片，方便他站复制
+    mySite: {
+      name: '喵洛阁',
+      link: 'https://im.081531.xyz/',
+      avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=3149261770&spec=0',
+      descr: '人生如逆旅，我亦是行人。',
+      siteshot: 'https://up.sc.cn/link/2Hy4vjnw',
+      atom: momentFeedURL,
+    },
   },
   nav: [
     { label: '友链', icon: 'lucide:link', to: '/friends' },
     { label: 'RSS', icon: 'lucide:rss', to: '/rss' },
+    { label: '动态', icon: 'lucide:rss', href: momentFeedURL },
     ...(adminEmbed
       ? [{ label: '后台', icon: 'lucide:settings', to: '/admin' } as const]
       : [{ label: '后台', icon: 'lucide:settings', href: adminURL } as const]),
