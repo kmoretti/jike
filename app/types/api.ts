@@ -72,7 +72,7 @@ export interface FriendLinkApplyReq {
   link: string
   avatar: string
   description?: string
-  email: string
+  email?: string
   snapshot?: string
   friend_link_page?: string
   feed?: string
@@ -86,7 +86,7 @@ export interface FriendLinkUpdateApplyReq {
   link: string
   avatar: string
   description?: string
-  email: string
+  email?: string
   snapshot?: string
   friend_link_page?: string
   feed?: string

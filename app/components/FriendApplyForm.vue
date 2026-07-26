@@ -57,9 +57,9 @@
           <input v-model="applyForm.snapshot" class="field-input" type="url" placeholder="站点截图链接">
         </div>
         <div class="form-field">
-          <label class="field-label">联系邮箱 <span class="required">*</span></label>
-          <input v-model="applyForm.email" class="field-input" type="email" required placeholder="you@example.com">
-          <p class="field-hint">用于管理员联系，不会公开显示</p>
+          <label class="field-label">联系邮箱</label>
+          <input v-model="applyForm.email" class="field-input" type="email" placeholder="you@example.com">
+          <p class="field-hint">选填，填写后可接收审核通知；不填则无法通过邮箱查询申请状态</p>
         </div>
         <div class="form-field">
           <label class="field-label">友链页面</label>
@@ -109,9 +109,9 @@
           <input v-model="updateForm.snapshot" class="field-input" type="url" placeholder="站点截图链接">
         </div>
         <div class="form-field">
-          <label class="field-label">联系邮箱 <span class="required">*</span></label>
-          <input v-model="updateForm.email" class="field-input" type="email" required placeholder="you@example.com">
-          <p class="field-hint">需要与原友链登记邮箱一致</p>
+          <label class="field-label">联系邮箱</label>
+          <input v-model="updateForm.email" class="field-input" type="email" placeholder="you@example.com">
+          <p class="field-hint">选填；若原友链登记了邮箱，建议填写一致以便校验归属</p>
         </div>
         <div class="form-field">
           <label class="field-label">新友链页面</label>
@@ -385,8 +385,8 @@ function validateForm(form: ApplyForm | UpdateForm): string | null {
   if (!link) return '请输入站点地址'
   if (!/^https?:\/\//i.test(link)) return '站点地址必须以 http:// 或 https:// 开头'
   if (!form.avatar.trim()) return '请输入头像地址'
-  if (!form.email.trim()) return '请输入联系邮箱'
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return '请输入有效的邮箱地址'
+  const email = form.email?.trim() || ''
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return '请输入有效的邮箱地址'
   if ('original_url' in form) {
     const original = normalizeURL(form.original_url)
     if (!original) return '请输入原站点地址'
