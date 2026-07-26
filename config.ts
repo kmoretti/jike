@@ -43,6 +43,11 @@ export const jikeConfig = {
     friends: 12,
     rss: 20,
   },
+  friendLink: {
+    // 友链申请表单中「我已添加 xxx 的友情链接」里显示的站点名
+    // 留空则使用 site.name
+    applyConditionSiteName: '喵洛阁',
+  },
   nav: [
     { label: '友链', icon: 'lucide:link', to: '/friends' },
     { label: 'RSS', icon: 'lucide:rss', to: '/rss' },

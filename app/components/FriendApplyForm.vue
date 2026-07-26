@@ -221,8 +221,10 @@ interface UpdateForm extends ApplyForm {
 const api = useJikeApi()
 const colorMode = useColorMode()
 
+const conditionSiteName = jikeConfig.friendLink?.applyConditionSiteName || jikeConfig.site.name
+
 const conditions = ref([
-  { checked: false, text: '我已添加 <strong>' + jikeConfig.site.name + '</strong> 的友情链接' },
+  { checked: false, text: '我已添加 <strong>' + conditionSiteName + '</strong> 的友情链接' },
   { checked: false, text: '我的网站现在可以在中国大陆区域正常访问' },
   { checked: false, text: '网站内容符合中国大陆法律法规' },
   { checked: false, text: '我的链接主体为<strong>个人</strong>，网站类型为<strong>博客</strong>' },
