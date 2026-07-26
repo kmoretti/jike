@@ -21,7 +21,7 @@
         </div>
         <div class="memo-footer">
           <NuxtLink :to="`/memo/${moment.id}`" class="memo-date">{{ formatDate(moment.createdAt) }}</NuxtLink>
-          <a v-if="moment.messageLink" class="source-link" :href="moment.messageLink" target="_blank" rel="noopener noreferrer">来源 <Icon name="lucide:arrow-up-right" /></a>
+          <a v-if="moment.messageLink" class="source-link" :href="moment.messageLink" target="_blank" rel="noopener noreferrer">来源 <Icon name="lucide:external-link" /></a>
           <button
             type="button"
             class="comment-button"
