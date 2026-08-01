@@ -13,9 +13,23 @@
 </template>
 
 <script setup lang="ts">
-const { y } = useWindowScroll()
+const visible = ref(false)
 
-const visible = computed(() => y.value > 300)
+function checkVisible() {
+  if (!import.meta.client) return
+  const scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0
+  visible.value = scrollTop > 200
+}
+
+onMounted(() => {
+  checkVisible()
+  window.addEventListener('scroll', checkVisible, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  if (!import.meta.client) return
+  window.removeEventListener('scroll', checkVisible)
+})
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
