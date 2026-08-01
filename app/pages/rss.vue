@@ -50,6 +50,15 @@
 import { jikeConfig } from '../../config'
 import type { ApiRssPost } from '../types/api'
 
+const RSS_CACHE_KEY = 'rss:first-page'
+const RSS_CACHE_TTL = 30 * 60 * 1000 // 30 分钟
+
+interface RssCache {
+  items: ApiRssPost[]
+  total: number
+  page: number
+}
+
 useHead({ title: `RSS · ${jikeConfig.site.name}`, meta: [{ name: 'description', content: 'RSS 文章聚合' }] })
 
 const api = useJikeApi()
@@ -63,6 +72,17 @@ const error = useState<string | null>('jike-rss-error', () => null)
 
 async function load(targetPage = 1, append = false) {
   if (loading.value) return
+
+  if (targetPage === 1 && !append) {
+    const cached = getCachedData<RssCache>(RSS_CACHE_KEY, RSS_CACHE_TTL)
+    if (cached) {
+      page.value = cached.page
+      total.value = cached.total
+      posts.value = cached.items
+      return
+    }
+  }
+
   loading.value = true
   error.value = null
   try {
@@ -71,6 +91,9 @@ async function load(targetPage = 1, append = false) {
     page.value = data.page
     total.value = data.total
     posts.value = append ? [...posts.value, ...items] : items
+    if (targetPage === 1 && !append) {
+      setCachedData<RssCache>(RSS_CACHE_KEY, { items, total: data.total, page: data.page })
+    }
   } catch (cause) {
     error.value = cause instanceof Error ? cause.message : '文章加载失败，请稍后重试'
   } finally {
@@ -79,7 +102,10 @@ async function load(targetPage = 1, append = false) {
 }
 
 function loadMore() { if (posts.value.length < total.value) load(page.value + 1, true) }
-function reload() { load(1, false) }
+function reload() {
+  clearCachedData(RSS_CACHE_KEY)
+  load(1, false)
+}
 
 async function refresh() {
   if (refreshing.value) return
@@ -89,6 +115,7 @@ async function refresh() {
     await api.refreshRssPosts()
     // Give the backend a moment to persist articles, then reload the list.
     await new Promise(resolve => setTimeout(resolve, 1500))
+    clearCachedData(RSS_CACHE_KEY)
     await load(1, false)
   } catch (cause) {
     error.value = cause instanceof Error ? cause.message : 'RSS 抓取失败，请稍后重试'

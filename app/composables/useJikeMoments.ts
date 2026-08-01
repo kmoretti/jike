@@ -1,6 +1,9 @@
 import type { Moment, MomentsPage } from '../types/moment'
 import { jikeConfig } from '../../config'
 
+const MOMENTS_CACHE_KEY = 'moments:first-page'
+const MOMENTS_CACHE_TTL = 5 * 60 * 1000 // 5 分钟
+
 export function useJikeMoments() {
   const api = useJikeApi()
   const { fingerprintToken } = useFingerprint()
@@ -15,6 +18,17 @@ export function useJikeMoments() {
 
   async function load(targetPage = 1, append = false) {
     if (loading.value) return
+
+    // 首屏优先读取缓存，避免每次进入都请求 API
+    if (targetPage === 1 && !append) {
+      const cached = getCachedData<MomentsPage>(MOMENTS_CACHE_KEY, MOMENTS_CACHE_TTL)
+      if (cached) {
+        applyPage(cached, false)
+        hasLoaded.value = true
+        return
+      }
+    }
+
     loading.value = true
     error.value = null
 
@@ -22,6 +36,9 @@ export function useJikeMoments() {
       const result = await api.getMoments(targetPage, pageSize, fingerprintToken.value)
       applyPage(result, append)
       hasLoaded.value = true
+      if (targetPage === 1 && !append) {
+        setCachedData(MOMENTS_CACHE_KEY, result)
+      }
     } catch (cause) {
       error.value = cause instanceof Error ? cause.message : '动态加载失败，请稍后重试'
     } finally {
@@ -33,6 +50,7 @@ export function useJikeMoments() {
   async function refresh() {
     if (refreshing.value) return
     refreshing.value = true
+    clearCachedData(MOMENTS_CACHE_KEY)
     await load(1, false)
   }
 

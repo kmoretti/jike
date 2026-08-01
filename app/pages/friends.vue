@@ -85,6 +85,14 @@
 import { jikeConfig } from '../../config'
 import type { ApiFriendGroup, ApiFriendJSON } from '../types/api'
 
+const FRIENDS_CACHE_KEY = 'friends:data'
+const FRIENDS_CACHE_TTL = 30 * 60 * 1000 // 30 分钟
+
+interface FriendsCache {
+  groups: ApiFriendGroup[]
+  latencyMap: Record<string, number>
+}
+
 useHead({ title: `友链 · ${jikeConfig.site.name}`, meta: [{ name: 'description', content: '友链列表' }] })
 
 const groups = useState<ApiFriendGroup[]>('jike-friend-groups', () => [])
@@ -120,6 +128,17 @@ function normalizeUrl(url: string) {
 
 async function load() {
   if (loading.value) return
+
+  const cached = getCachedData<FriendsCache>(FRIENDS_CACHE_KEY, FRIENDS_CACHE_TTL)
+  if (cached) {
+    groups.value = cached.groups
+    latencyMap.value = cached.latencyMap
+    if (groups.value.length && !tabs.value.includes(activeTab.value)) {
+      activeTab.value = '全部'
+    }
+    return
+  }
+
   loading.value = true
   error.value = null
   try {
@@ -141,6 +160,8 @@ async function load() {
     if (groups.value.length && !tabs.value.includes(activeTab.value)) {
       activeTab.value = '全部'
     }
+
+    setCachedData<FriendsCache>(FRIENDS_CACHE_KEY, { groups: groups.value, latencyMap: map })
   } catch (cause) {
     error.value = cause instanceof Error ? cause.message : '友链加载失败，请稍后重试'
   } finally {
@@ -149,6 +170,7 @@ async function load() {
 }
 
 function reload() {
+  clearCachedData(FRIENDS_CACHE_KEY)
   load()
 }
 
