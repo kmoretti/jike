@@ -118,3 +118,25 @@ export interface ApiRssPost {
   author: string
   time: number
 }
+
+export interface ApiFriendJSONLink {
+  name: string
+  blog?: string
+  url: string
+  avatar: string
+  desc?: string
+  color?: string
+  siteshot?: string
+  rss?: string
+  tags?: string[]
+}
+
+export interface ApiFriendGroup {
+  name: string
+  desc?: string
+  links: ApiFriendJSONLink[]
+}
+
+export interface ApiFriendJSON {
+  linkGroups: ApiFriendGroup[]
+}

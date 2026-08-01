@@ -254,7 +254,7 @@ const applyForm = ref<ApplyForm>({
   snapshot: '',
   friend_link_page: '',
   feed: '',
-  enable_rss: true,
+  enable_rss: false,
 })
 
 const updateForm = ref<UpdateForm>({
@@ -267,7 +267,7 @@ const updateForm = ref<UpdateForm>({
   snapshot: '',
   friend_link_page: '',
   feed: '',
-  enable_rss: true,
+  enable_rss: false,
 })
 
 const submissions = ref<FriendLinkSubmission[]>([])
@@ -296,8 +296,8 @@ function statusClass(status: string) {
     pending: 'pending',
     survival: 'approved',
     rejected: 'rejected',
-    timeout: 'rejected',
-    error: 'rejected',
+    timeout: 'timeout',
+    error: 'error',
   }
   return map[status] || status
 }
@@ -475,11 +475,11 @@ async function submit(type: 'apply' | 'update') {
 function resetForm() {
   applyForm.value = {
     name: '', link: '', avatar: '', description: '', email: '',
-    snapshot: '', friend_link_page: '', feed: '', enable_rss: true,
+    snapshot: '', friend_link_page: '', feed: '', enable_rss: false,
   }
   updateForm.value = {
     original_url: '', name: '', link: '', avatar: '', description: '', email: '',
-    snapshot: '', friend_link_page: '', feed: '', enable_rss: true,
+    snapshot: '', friend_link_page: '', feed: '', enable_rss: false,
   }
 }
 
@@ -901,11 +901,19 @@ onMounted(async () => {
   color: #16a34a;
 }
 
-.submission-badge.rejected,
-.submission-badge.timeout,
-.submission-badge.error {
+.submission-badge.rejected {
   background: rgba(239, 68, 68, 0.15);
   color: #dc2626;
+}
+
+.submission-badge.timeout {
+  background: rgba(245, 166, 35, 0.15);
+  color: #d97706;
+}
+
+.submission-badge.error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
 }
 
 .dark .submission-badge.pending {
@@ -917,10 +925,16 @@ onMounted(async () => {
   color: #4ade80;
 }
 
-.dark .submission-badge.rejected,
-.dark .submission-badge.timeout,
-.dark .submission-badge.error {
+.dark .submission-badge.rejected {
   color: #f87171;
+}
+
+.dark .submission-badge.timeout {
+  color: #fbbf24;
+}
+
+.dark .submission-badge.error {
+  color: #fca5a5;
 }
 
 .submission-desc {
